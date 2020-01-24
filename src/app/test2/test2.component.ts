@@ -24,4 +24,8 @@ export class Test2Component implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
+  update(text: string): void {
+    this.hello = text;
+  }
+
 }

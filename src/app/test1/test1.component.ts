@@ -21,7 +21,7 @@ export class Test1Component implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(this.myTestService.getHello().subscribe(text => this.hello = text));
-    this.test2Component.hello = "bye B";
+    this.test2Component.update("bye B");
   }
 
   /**

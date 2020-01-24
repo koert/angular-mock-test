@@ -57,3 +57,41 @@ You can check if the mock was accessed with `verify`.
 verify(mockMyTestService.getHello()).times(1);
 ----
 
+== Mock child component
+Suppose that you use a child component. Test1Component uses Test2Component as a child:
+
+----
+<test2 #testChild2></test2>
+----
+
+----
+@ViewChild("testChild2") private test2Component: Test2Component;
+----
+
+It would be nice if we can isolate Test2Component with a mock.
+
+----
+TestBed.configureTestingModule({
+  declarations: [ Test1Component, instance(mockTest2Component) ],
+  providers: [
+    {provide: MyTestService, useValue: instance(mockMyTestService)},
+  ]
+})
+----
+
+You will get this error message: `Error: Unexpected value '[object Object]' declared by the module 'DynamicTestModule'`.
+
+I have solved this by using the https://github.com/ike18t/ng-mocks#readme[ng-mocks library]. Use `MockComponent()` to create a mock.
+
+----
+TestBed.configureTestingModule({
+  declarations: [ Test1Component, MockComponent(Test2Component) ],
+  providers: [
+    {provide: MyTestService, useValue: instance(mockMyTestService)},
+  ]
+})
+----
+
+With both of the mock libraries you can properly isolate your component and make unit testing much easier.
+
+You can take a look at https://github.com/koert/angular-mock-test[the code in my repository at Github].

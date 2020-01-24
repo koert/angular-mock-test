@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Test1Component } from './test1.component';
 import {MyTestService} from "../my-test.service";
 import {instance, mock, verify, when} from "ts-mockito";
+import {MockComponent} from "ng-mocks";
 import {of} from "rxjs";
 import {Test2Component} from "../test2/test2.component";
 
@@ -14,7 +15,7 @@ describe('Test1Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Test1Component, Test2Component ],
+      declarations: [ Test1Component, MockComponent(Test2Component) ],
       providers: [
         {provide: MyTestService, useValue: instance(mockMyTestService)},
       ]
