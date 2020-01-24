@@ -1,0 +1,59 @@
+= angular-mock-test
+
+== Unit testing Angular components
+
+When you create an Angular application and componentes with ths NG command line interface, it creates unit tests for you.
+The support for unit testing is great, you just run `ng test` and you will see the results.
+
+----
+angular-mock-test> ng test
+ 11% building 9/9 modules 0 active24 01 2020 10:52:16.444:WARN [karma]: No captured browser, open http://localhost:9876/
+24 01 2020 10:52:16.448:INFO [karma-server]: Karma v3.1.4 server started at http://0.0.0.0:9876/
+24 01 2020 10:52:16.448:INFO [launcher]: Launching browsers Chrome with concurrency unlimited
+24 01 2020 10:52:16.453:INFO [launcher]: Starting browser Chrome
+24 01 2020 10:52:20.714:WARN [karma]: No captured browser, open http://localhost:9876/
+24 01 2020 10:52:20.794:INFO [Chromium 79.0.3945 (Linux 0.0.0)]: Connected on socket PQFYob1QwIhZxRoMAAAA with id 41864170
+Chromium 79.0.3945 (Linux 0.0.0): Executed 9 of 9 SUCCESS (0.253 secs / 0.243 secs)
+TOTAL: 9 SUCCESS
+TOTAL: 9 SUCCESS
+----
+
+== Mocking services
+
+In many components, you would use a service to retrieve data. In the unit test it is useful to isolate the component from its
+dependencies like a service with mocks. The https://github.com/NagRock/ts-mockito#readme[ts-mockito library] makes it easy to create
+mocks, control their behavior, and check it they are called correctly.
+
+You first create a mock object:
+----
+let mockMyTestService = mock(MyTestService);
+----
+
+With this object you can control the simulated responses of the mock.
+To make the mocked service available to the component, you create an instance.
+
+----
+providers: [
+  {provide: MyTestService, useValue: instance(mockMyTestService)},
+]
+----
+
+This way, the component uses an instance of the mock.
+Then you can program a response with `when` and `thenReturn`.
+
+----
+beforeEach(() => {
+  fixture = TestBed.createComponent(Test1Component);
+  component = fixture.componentInstance;
+  when(mockMyTestService.getHello()).thenReturn(of("hello from test"));
+
+  fixture.detectChanges();
+});
+----
+
+You can check if the mock was accessed with `verify`.
+
+----
+verify(mockMyTestService.getHello()).times(1);
+----
+

@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Test1Component } from './test1.component';
 import {MyTestService} from "../my-test.service";
-import {instance, mock, when} from "ts-mockito";
+import {instance, mock, verify, when} from "ts-mockito";
 import {of} from "rxjs";
 import {Test2Component} from "../test2/test2.component";
 
@@ -32,6 +32,8 @@ describe('Test1Component', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+
+    verify(mockMyTestService.getHello()).times(1);
   });
 
   it(`should have as h2 'Test 1'`, () => {
